@@ -27,7 +27,7 @@ Xcode.app itself does open, but crashes when trying to open a project (I think t
    3. For the Name I recommend "XcodeSigner", for Identity Type select "Self Signed Root", and for Certificate Type choose "Code Signing". Then click "Create", and continue through the warning.
    4. You should now have a self-signed code signing certificate in the "login" keychain.
 4. Run the script from this repository and follow the prompts:  
-   `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/mrpippy/XcodeNueve/master/XcodeNueve.sh)"`
+   `/bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/mrpippy/XcodeNueve/master/XcodeNueve.sh)"`
 
 ## How do I use it?
 
