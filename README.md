@@ -19,42 +19,13 @@ Xcode.app itself does open, but crashes when trying to open a project (I think t
 ## Tell me how!
 
 1. Download Xcode 9.4.1 from [Apple Developer](https://developer.apple.com/download/all/) and extract it. I recommend renaming it to `Xcode9.app` and moving to `/Applications`.
-2. Create a code signing signature (XVim instructions):
+2. Create a code signing signature (instructions courtesy of the [XVim project](https://github.com/XVimProject/XVim2/blob/master/SIGNING_Xcode.md)):
    1. Open Keychain Access.app and select `login` in the left pane.
    2. In the menu bar, select Keychain Access -> Certificate Assistant -> Create a Certificate...
    3. For the Name I recommend "XcodeSigner", for Identity Type select "Self Signed Root", and for Certificate Type choose "Code Signing". Then click "Create", and continue through the warning.
    4. You should now have a self-signed code signing certificate in the "login" keychain.
-4. Modify DVTKit.framework/Contents/MacOS/DVTKit:
-   1. Verify DVTKit is unmodified:
-   ```
-   % openssl dgst -md5 DVTKit
-   MD5(DVTKit)= c14a719f16794586759fb10bb6543faf
-   ```
-   2. Change reference in DVTKit from `_OBJC_IVAR_$_NSFont._fFlags` to `_OBJC_IVAR_$_NSCell._cFlags`:
-   ```
-   % echo "4E534365 6C6C2E5F 63466C61 6773" |  xxd -r -p -s 0x478967 - DVTKit
-   ```
-   3. Change reference in DVTKit from `_OBJC_IVAR_$_NSUndoTextOperation._layoutManager` to `_OBJC_IVAR_$_NSUndoTextOperation._affectedRange`:
-   ```
-   % echo "61666665 63746564 52616E67 65" | xxd -r -p -s 0x478ab6 - DVTKit
-   ```
-6. `codesign -f -s XcodeSigner /Applications/Xcode9.app/Contents/SharedFrameworks/DVTKit.framework`
-7. `codesign -f -s XcodeSigner /Applications/Xcode9.app`
-8. `codesign -f -s XcodeSigner /Applications/Xcode9.app/Contents/SharedFrameworks/DVTDocumentation.framework`
-9. `codesign -f -s XcodeSigner /Applications/Xcode9.app/Contents/Frameworks/IDEFoundation.framework`
-10. `codesign -f -s XcodeSigner /Applications/Xcode9.app/Contents/Developer/usr/bin/xcodebuild`
-11. (for launching Xcode.app itself)
-12. Modify `Contents/PlugIns/IDEInterfaceBuilderKit.framework/Versions/A/IDEInterfaceBuilderKit`:
-    1. Change references from `_OBJC_IVAR_$_NSFont._fFlags` to `_OBJC_IVAR_$_NSCell._cFlags`:
-    ```
-    % echo "4E534365 6C6C2E5F 63466C61 6773" |  xxd -r -p -s 0x7bed6d - IDEInterfaceBuilderKit
-    % echo "4E534365 6C6C2E5F 63466C61 6773" |  xxd -r -p -s 0x899801 - IDEInterfaceBuilderKit
-    ```
-    2. Change references from `_OBJC_IVAR_$_NSTableView._reserved` to `_OBJC_IVAR_$_NSTableView._delegate`
-    ```
-    % echo "64656C65 67617465" |  xxd -r -p -s 0x7bee08 - IDEInterfaceBuilderKit
-    % echo "64656C65 67617465" |  xxd -r -p -s 0x899894 - IDEInterfaceBuilderKit
-    ```
+4. Run the script from this repository and follow the prompts:  
+   `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/mrpippy/XcodeNueve/master/XcodeNueve.sh)"`
 
 ## How do I use it?
 
