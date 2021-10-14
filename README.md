@@ -2,6 +2,8 @@
 
 A hack allowing the use of Xcode 9's toolchain on macOS Catalina, Big Sur, and Monterey.
 
+![Demo of building an i386 binary on macOS 11.0 and Apple Silicon](demo.gif)
+
 ## Why?
 
 Xcode 9.4.1 and the macOS 10.13 SDK are the last versions capable of building 32-bit Intel (`i386`) binaries.
@@ -33,11 +35,12 @@ Xcode.app itself does open, but crashes when trying to open a project (I think t
 * The `env` command can be used to run this as a single command, like `env DEVELOPER_DIR=/Applications/Xcode9.app SDKROOT=/Applications/Xcode9.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk clang -arch i386 ...`
 * Also, on Apple Silicon, you will need to explicitly run the command emulated under Rosetta, using `arch -x86_64`. I usually find it easier to just run the entire shell emulated: `arch -x86_64 zsh`.
 * Building i386 binaries is considered cross-compiling, and may need additional options passed to a `configure` script/build system.
-* For example, here's a typical invocation of `configure` on Apple Silicon: `arch -x86_64 ./configure --host=i386-apple-darwin CC="env DEVELOPER_DIR=/Applications/Xcode9.app SDKROOT=/Applications/Xcode9.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk clang -arch i386"`
+* For example, here's a typical invocation of `configure` on Apple Silicon:  
+  `arch -x86_64 ./configure --host=i386-apple-darwin CC="env DEVELOPER_DIR=/Applications/Xcode9.app SDKROOT=/Applications/Xcode9.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk clang -arch i386"`
 
 ## Details
 
-Here's the error when trying to run unmodified Xcode 9 (either the IDE itself or its command-line tools) under macOS Catalina and later:
+Here's the error you get when trying to run unmodified Xcode 9 (either the IDE itself or its command-line tools) under macOS Catalina and later:
 
 ```
 % DEVELOPER_DIR=/Applications/Xcode9.app xcrun clang -v
@@ -45,3 +48,8 @@ dyld[83886]: Symbol not found: _OBJC_IVAR_$_NSFont._fFlags
   Referenced from: /Applications/Xcode9.app/Contents/SharedFrameworks/DVTKit.framework/Versions/A/DVTKit
   Expected in: /System/Library/Frameworks/AppKit.framework/Versions/C/AppKit
 ```
+
+## Who's reponsible for this?
+
+Brendan Shanks  
+[CodeWeavers](https://www.codeweavers.com)
