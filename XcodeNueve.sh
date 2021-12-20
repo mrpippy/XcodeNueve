@@ -74,6 +74,17 @@ echo "4E534365 6C6C2E5F 63466C61 6773" |  xxd -r -p -s 0x899801 - "$XCODE/Conten
 echo "64656C65 67617465" |  xxd -r -p -s 0x7bee08 - "$XCODE/Contents/PlugIns/IDEInterfaceBuilderKit.framework/Versions/A/IDEInterfaceBuilderKit"
 echo "64656C65 67617465" |  xxd -r -p -s 0x899894 - "$XCODE/Contents/PlugIns/IDEInterfaceBuilderKit.framework/Versions/A/IDEInterfaceBuilderKit"
 
+# Copy libtool from the (presumably newer) installed Xcode.app, to fix crashes on Monterey
+if [ -f "`xcode-select -p`/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool" ]; then
+    cp -p "`xcode-select -p`/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool" "$XCODE/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool"
+else
+    if [ -f "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool" ]; then
+        cp -p "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool" "$XCODE/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool"
+    else
+        echo "$0: Unable to find another Xcode to copy libtool from. Beware, Xcode 9.4.1's libtool sometimes crashes on Monterey."
+    fi
+fi
+
 codesign -f -s $IDENTITY "$XCODE/Contents/SharedFrameworks/DVTKit.framework"
 codesign -f -s $IDENTITY "$XCODE"
 codesign -f -s $IDENTITY "$XCODE/Contents/SharedFrameworks/DVTDocumentation.framework"
