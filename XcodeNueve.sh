@@ -85,6 +85,10 @@ else
     fi
 fi
 
+# Remove DebuggerLLDB.ideplugin and LLDB.framework to fix breakage on macOS 12.3 and up (they link against the system Python 2)
+rm -rf "$XCODE/Contents/PlugIns/DebuggerLLDB.ideplugin"
+rm -rf "$XCODE/Contents/SharedFrameworks/LLDB.framework"
+
 codesign -f -s $IDENTITY "$XCODE/Contents/SharedFrameworks/DVTKit.framework"
 codesign -f -s $IDENTITY "$XCODE"
 codesign -f -s $IDENTITY "$XCODE/Contents/SharedFrameworks/DVTDocumentation.framework"
