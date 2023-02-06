@@ -1,6 +1,6 @@
 # XcodeNueve 🛠 9️⃣ 
 
-A hack allowing the use of Xcode 9's toolchain on macOS Catalina, Big Sur, and Monterey.
+A hack allowing the use of Xcode 9's toolchain on macOS Catalina, Big Sur, Monterey, and Ventura.
 
 ![Demo of building an i386 binary on macOS 11.0 and Apple Silicon](demo.gif)
 
@@ -26,6 +26,7 @@ Xcode.app itself does open, but crashes when trying to open a project (I think t
    2. In the menu bar, select Keychain Access -> Certificate Assistant -> Create a Certificate...
    3. For the Name I recommend "XcodeSigner", for Identity Type select "Self Signed Root", and for Certificate Type choose "Code Signing". Then click "Create", and continue through the warning.
    4. You should now have a self-signed code signing certificate in the "login" keychain.
+3. On macOS Ventura and later, you will need to give Terminal.app "App Management" permissions in the Privacy & Security pane of System Settings. This permission can be removed after the script is successfully run. 
 4. Run the script from this repository and follow the prompts:  
    `/bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/mrpippy/XcodeNueve/master/XcodeNueve.sh)"`
 
