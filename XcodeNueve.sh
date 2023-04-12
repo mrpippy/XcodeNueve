@@ -77,6 +77,10 @@ echo "64656C65 67617465" |  xxd -r -p -s 0x899894 - "$XCODE/Contents/PlugIns/IDE
 # Fix -[DVTSearchFieldCell willDrawVibrantly] method of DVTKit which crashes the whole UI
 echo "66909066 90906690 90" |  xxd -r -p -s 0xB63AE - "$XCODE/Contents/SharedFrameworks/DVTKit.framework/Versions/A/DVTKit"
 
+# Fix build/clean/test/etc square alerts in -[DVTBezelAlertPanel effectViewForBezel] (uses undocumented & outdated method)
+echo "66906690 669090" |  xxd -r -p -s 0xD0E40 - "$XCODE/Contents/SharedFrameworks/DVTKit.framework/Versions/A/DVTKit"
+echo "66909066 9090" |  xxd -r -p -s 0xD0EA1 - "$XCODE/Contents/SharedFrameworks/DVTKit.framework/Versions/A/DVTKit"
+
 # Copy libtool from the (presumably newer) installed Xcode.app, to fix crashes on Monterey
 if [ -f "`xcode-select -p`/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool" ]; then
     cp -p "`xcode-select -p`/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool" "$XCODE/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool"
