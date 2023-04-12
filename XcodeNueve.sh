@@ -98,7 +98,7 @@ mkdir $PY_TMP_DIR
 curl -o "$PY_TMP_DIR/python2.pkg" "https://www.python.org/ftp/python/2.7.18/python-2.7.18-macosx10.9.pkg"
 xar -C $PY_TMP_DIR -xf "$PY_TMP_DIR/python2.pkg"
 mkdir $XCODE_PY_DIR
-tar xvf "$PY_TMP_DIR/Python_Framework.pkg/Payload" -C $XCODE_PY_DIR > /dev/null
+tar xvf "$PY_TMP_DIR/Python_Framework.pkg/Payload" -C $XCODE_PY_DIR &> /dev/null
 rm -rf $PY_TMP_DIR
 
 # Replace Python 2.7 system dependency with a local one
