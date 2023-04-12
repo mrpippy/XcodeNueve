@@ -74,6 +74,9 @@ echo "4E534365 6C6C2E5F 63466C61 6773" |  xxd -r -p -s 0x899801 - "$XCODE/Conten
 echo "64656C65 67617465" |  xxd -r -p -s 0x7bee08 - "$XCODE/Contents/PlugIns/IDEInterfaceBuilderKit.framework/Versions/A/IDEInterfaceBuilderKit"
 echo "64656C65 67617465" |  xxd -r -p -s 0x899894 - "$XCODE/Contents/PlugIns/IDEInterfaceBuilderKit.framework/Versions/A/IDEInterfaceBuilderKit"
 
+# Fix -[DVTSearchFieldCell willDrawVibrantly] method of DVTKit which crashes the whole UI
+echo "66909066 90906690 90" |  xxd -r -p -s 0xB63AE - "$XCODE/Contents/SharedFrameworks/DVTKit.framework/Versions/A/DVTKit"
+
 # Copy libtool from the (presumably newer) installed Xcode.app, to fix crashes on Monterey
 if [ -f "`xcode-select -p`/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool" ]; then
     cp -p "`xcode-select -p`/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool" "$XCODE/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool"
