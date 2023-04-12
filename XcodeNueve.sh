@@ -88,12 +88,25 @@ else
     fi
 fi
 
-# Remove DebuggerLLDB.ideplugin and LLDB.framework to fix breakage on macOS 12.3 and up (they link against the system Python 2)
-rm -rf "$XCODE/Contents/PlugIns/DebuggerLLDB.ideplugin"
-rm -rf "$XCODE/Contents/SharedFrameworks/LLDB.framework"
+echo "Downloading Python 2.7.18..." 
+echo "Note: It's NOT being installed globally, only in Xcode 9 folder" 
+
+# Download Python 2.7.18 installer to use a part of it for making a working dependency
+PY_TMP_DIR="$TMPDIR/python2.7-installer"
+XCODE_PY_DIR="$XCODE/Contents/SharedFrameworks/Python.framework"
+mkdir $PY_TMP_DIR
+curl -o "$PY_TMP_DIR/python2.pkg" "https://www.python.org/ftp/python/2.7.18/python-2.7.18-macosx10.9.pkg"
+xar -C $PY_TMP_DIR -xf "$PY_TMP_DIR/python2.pkg"
+mkdir $XCODE_PY_DIR
+tar xvf "$PY_TMP_DIR/Python_Framework.pkg/Payload" -C $XCODE_PY_DIR > /dev/null
+rm -rf $PY_TMP_DIR
+
+# Replace Python 2.7 system dependency with a local one
+echo "40727061 74682F50 7974686F 6E2E6672 616D6577 6F726B2F 2E2E2F50 7974686F 6E2E6672 616D6577 6F726B2F 56657273 696F6E73 2F322E37 2F507974 686F6E" |  xxd -r -p -s 0x9e8 - "$XCODE/Contents/SharedFrameworks/LLDB.framework/Versions/A/LLDB"
 
 codesign -f -s $IDENTITY "$XCODE/Contents/SharedFrameworks/DVTKit.framework"
 codesign -f -s $IDENTITY "$XCODE"
 codesign -f -s $IDENTITY "$XCODE/Contents/SharedFrameworks/DVTDocumentation.framework"
 codesign -f -s $IDENTITY "$XCODE/Contents/Frameworks/IDEFoundation.framework"
 codesign -f -s $IDENTITY "$XCODE/Contents/Developer/usr/bin/xcodebuild"
+codesign -f -s $IDENTITY "$XCODE/Contents/SharedFrameworks/LLDB.framework"
