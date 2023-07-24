@@ -13,7 +13,7 @@ check_file_exists() {
 }
 
 check_sha256() {
-    if [ `openssl dgst -sha256 "$1" | sed 's/SHA256(.*)= //'` != "$2" ]; then
+    if [ "`openssl dgst -sha256 "$1" | sed -E 's/SHA(2-)?256(.*)= //'`" != "$2" ]; then
         echo "$0: $1 has an unexpected checksum. Is this an unmodified copy of Xcode 9.4.1?"
         exit 1
     fi
