@@ -58,7 +58,10 @@ check_sha256 "$XCODE/Contents/PlugIns/IDEInterfaceBuilderKit.framework/Versions/
              "c8d45ddd9e1334554cc57ee9bb1bc437920f599710aa81b1cbe144fa7ee59740"
 
 # Do a test codesign to check that the given identity exists before we start modifying files
-codesign --dryrun -f -s $IDENTITY "$XCODE/Contents/Developer/usr/bin/xcodebuild"
+if ! codesign --dryrun -f -s "$IDENTITY" "$XCODE/Contents/Developer/usr/bin/xcodebuild"; then
+    echo "$0: codesign dry-run failed. Is '$IDENTITY' a valid signing identity?"
+    exit 1
+fi
 
 # Change reference in DVTKit from _OBJC_IVAR_$_NSFont._fFlags to _OBJC_IVAR_$_NSCell._cFlags
 echo "4E534365 6C6C2E5F 63466C61 6773" |  xxd -r -p -s 0x478967 - "$XCODE/Contents/SharedFrameworks/DVTKit.framework/Versions/A/DVTKit"
@@ -89,8 +92,8 @@ fi
 rm -rf "$XCODE/Contents/PlugIns/DebuggerLLDB.ideplugin"
 rm -rf "$XCODE/Contents/SharedFrameworks/LLDB.framework"
 
-codesign -f -s $IDENTITY "$XCODE/Contents/SharedFrameworks/DVTKit.framework"
-codesign -f -s $IDENTITY "$XCODE"
-codesign -f -s $IDENTITY "$XCODE/Contents/SharedFrameworks/DVTDocumentation.framework"
-codesign -f -s $IDENTITY "$XCODE/Contents/Frameworks/IDEFoundation.framework"
-codesign -f -s $IDENTITY "$XCODE/Contents/Developer/usr/bin/xcodebuild"
+codesign -f -s "$IDENTITY" "$XCODE/Contents/SharedFrameworks/DVTKit.framework"
+codesign -f -s "$IDENTITY" "$XCODE"
+codesign -f -s "$IDENTITY" "$XCODE/Contents/SharedFrameworks/DVTDocumentation.framework"
+codesign -f -s "$IDENTITY" "$XCODE/Contents/Frameworks/IDEFoundation.framework"
+codesign -f -s "$IDENTITY" "$XCODE/Contents/Developer/usr/bin/xcodebuild"
