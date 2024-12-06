@@ -1,6 +1,6 @@
 # XcodeNueve 🛠 9️⃣ 
 
-A hack allowing the use of Xcode 9's toolchain on macOS Catalina, Big Sur, Monterey, and Ventura.
+A hack allowing the use of Xcode 9's toolchain on macOS Catalina, Big Sur, Monterey, Ventura, Sonoma, and Sequoia.
 
 ![Demo of building an i386 binary on macOS 11.0 and Apple Silicon](demo.gif)
 
