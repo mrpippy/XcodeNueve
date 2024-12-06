@@ -13,7 +13,7 @@ check_file_exists() {
 }
 
 check_sha256() {
-    if [ `openssl dgst -sha256 -r "$1" | awk -F" " '{print $1}'` != "$2" ]; then
+    if [ "$(openssl dgst -sha256 -r "$1" | awk -F" " '{print $1}')" != "$2" ]; then
         echo "$0: $1 has an unexpected checksum. Is this an unmodified copy of Xcode 9.4.1?"
         exit 1
     fi
@@ -78,8 +78,8 @@ echo "64656C65 67617465" |  xxd -r -p -s 0x7bee08 - "$XCODE/Contents/PlugIns/IDE
 echo "64656C65 67617465" |  xxd -r -p -s 0x899894 - "$XCODE/Contents/PlugIns/IDEInterfaceBuilderKit.framework/Versions/A/IDEInterfaceBuilderKit"
 
 # Copy libtool from the (presumably newer) installed Xcode.app, to fix crashes on Monterey
-if [ -f "`xcode-select -p`/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool" ]; then
-    cp -p "`xcode-select -p`/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool" "$XCODE/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool"
+if [ -f "$(xcode-select -p)/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool" ]; then
+    cp -p "$(xcode-select -p)/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool" "$XCODE/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool"
 else
     if [ -f "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool" ]; then
         cp -p "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool" "$XCODE/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool"
